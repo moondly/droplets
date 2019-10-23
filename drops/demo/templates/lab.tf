@@ -17,6 +17,19 @@ resource "lxd_container" "demo01" {
   config = {
     "user.access_interface" = "eth0"
   }
+}
 
+resource "lxd_container" "demo02" {
+  name      = "demo02"
+  image     = "ubuntu:18.04"
+  ephemeral = false
+  profiles  = ["default"]
+  limits = {
+    cpu    = "1"
+    memory = "256MB"
+  }
 
+  config = {
+    "user.access_interface" = "eth0"
+  }
 }
