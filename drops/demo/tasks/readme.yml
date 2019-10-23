@@ -1,0 +1,6 @@
+- template:
+    src: "readme.j2"
+    dest: "{{ dir }}/{{ droplet_name }}/README"
+    owner: vagrant
+    group: vagrant
+    mode: '0644'
