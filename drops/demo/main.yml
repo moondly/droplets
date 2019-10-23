@@ -1,7 +1,0 @@
----
-- hosts: all
-  vars:
-    dir: "./"
-    droplet_name: demo
-  roles:
-    - demo 

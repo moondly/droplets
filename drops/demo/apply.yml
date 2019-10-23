@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - { role: demo }
+
+---
+- hosts: demo01
+  roles:
+    - { role: geerlingguy.nginx }

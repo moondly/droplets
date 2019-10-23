@@ -1,5 +1,5 @@
-- name: added in 2.4, previously you used 'include'
-  include: redhat.yml
+- import_playbook: redhat.yml
   when: ansible_facts['os_family']|lower == 'redhat'
-- include: debian.yml
+
+- import_playbook: debian.yml
   when: ansible_facts['os_family']|lower == 'debian'
