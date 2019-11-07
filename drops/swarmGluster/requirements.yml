@@ -1,0 +1,5 @@
+# from galaxy
+- src: geerlingguy.pip
+- src: geerlingguy.glusterfs
+- src: geerlingguy.docker
+- src: thomasjpfan.docker-swarm

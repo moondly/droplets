@@ -1,0 +1,78 @@
+---
+- hosts: swarm*
+  become: yes
+  become_method: sudo
+
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+    - name: swarm master group
+      add_host:
+        name: "{{ ansible_play_hosts | first }}"
+        groups: docker_swarm_manager
+
+    - name: swarm worker group
+      add_host:
+        name: "{{ item }}"
+        groups: docker_swarm_worker
+      with_items:
+        - "{{ ansible_play_hosts | difference(ansible_play_hosts | first) }}"
+
+  roles:
+    - geerlingguy.glusterfs
+    - geerlingguy.docker
+    - thomasjpfan.docker-swarm
+    - geerlingguy.pip
+  
+  tasks:
+    - name: "Build hosts file"
+      lineinfile: 
+        dest: /etc/hosts 
+        regexp: '.*{{ item }}$' 
+        line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_hostname }}" 
+        state: present
+      when: hostvars[item].ansible_default_ipv4.address is defined
+      with_items: "{{ ansible_play_hosts }}"
+
+    - name: Ensure Gluster brick and mount directories exist.
+      file: "path={{ item }} state=directory mode=0775"
+      with_items:
+        - "{{ gluster_brick_dir }}"
+        - "{{ gluster_mount_dir }}"
+
+    - name: Configure Gluster volume.
+      gluster_volume:
+        state: present
+        name: "{{ gluster_brick_name }}"
+        brick: "{{ gluster_brick_dir }}"
+        replicas: 3
+        cluster: "{{ ansible_play_hosts | join(',') }}"
+        host: "{{ inventory_hostname }}"
+        force: yes
+      run_once: true
+
+    - name: Ensure Gluster volume is mounted.
+      mount:
+        name: "{{ gluster_mount_dir }}"
+        src: "{{ inventory_hostname }}:/{{ gluster_brick_name }}"
+        fstype: glusterfs
+        opts: "defaults,_netdev"
+        state: mounted
+
+    - name: Docker python lib
+      pip:
+        name: docker
+    
+    - set_fact:
+        swarm_master_nodes: "{{ groups['docker_swarm_manager'] }}"
+        swarm_worker_nodes: "{{ groups['docker_swarm_worker'] }}"
+    
+    - name: Readme
+      local_action: template
+      args:
+        src: "readme.j2"
+        dest: "{{ drop_home }}/README"
+        mode: '0644'
+      run_once: true
+
