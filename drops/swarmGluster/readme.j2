@@ -2,13 +2,21 @@
 ## DROPLET {{drop_name}}
 ###################################
 
-Swarm Master: {{ swarm_master_nodes | first }} ({{ hostvars[swarm_master_nodes | first].ansible_hostname }})
-Swarm Workers: {{ swarm_worker_nodes | to_yaml }}
+Swarm master nodes:
+{% for host in swarm_master_nodes | sort %}
+  {{ hostvars[host].ansible_hostname }}
+{% endfor %}
+
+Swarm worker nodes:
+{% for host in swarm_worker_nodes | sort %}
+  {{ hostvars[host].ansible_hostname }}
+{% endfor %}
+
 Gluster mounted at: {{ gluster_mount_dir }}
 
 To connect:
 
-{% for host in ansible_play_hosts %}
+{% for host in ansible_play_hosts | sort %}
   ssh root@{{ hostvars[host].ansible_hostname }}   ({{ hostvars[host].inventory_hostname }})
 {% endfor %}
 

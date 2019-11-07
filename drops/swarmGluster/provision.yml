@@ -7,17 +7,24 @@
     - vars.yml
 
   pre_tasks:
+    - set_fact:
+        swarm_master_nodes: "{{ ansible_play_hosts[0:3] }}"
+    - set_fact:
+        swarm_worker_nodes: "{{ ansible_play_hosts | difference(swarm_master_nodes) }}"
+
     - name: swarm master group
       add_host:
-        name: "{{ ansible_play_hosts | first }}"
+        name: "{{ item }}"
         groups: docker_swarm_manager
+      with_items:
+        - "{{ swarm_master_nodes | sort }}"
 
     - name: swarm worker group
       add_host:
         name: "{{ item }}"
         groups: docker_swarm_worker
       with_items:
-        - "{{ ansible_play_hosts | difference(ansible_play_hosts | first) }}"
+        - "{{ swarm_worker_nodes | sort }}"
 
   roles:
     - geerlingguy.glusterfs
@@ -46,7 +53,7 @@
         state: present
         name: "{{ gluster_brick_name }}"
         brick: "{{ gluster_brick_dir }}"
-        replicas: 3
+        replicas: "{{ ansible_play_hosts | count }}"
         cluster: "{{ ansible_play_hosts | join(',') }}"
         host: "{{ inventory_hostname }}"
         force: yes
@@ -63,10 +70,6 @@
     - name: Docker python lib
       pip:
         name: docker
-    
-    - set_fact:
-        swarm_master_nodes: "{{ groups['docker_swarm_manager'] }}"
-        swarm_worker_nodes: "{{ groups['docker_swarm_worker'] }}"
     
     - name: Readme
       local_action: template

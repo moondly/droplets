@@ -51,3 +51,35 @@ resource "lxd_container" "swarm03" {
   }
 
 }
+
+resource "lxd_container" "swarm04" {
+  name      = "swarm04"
+  image     = "ubuntu:18.04"
+  ephemeral = false
+  profiles  = ["default"]
+  limits = {
+    cpu    = "2"
+    memory = "1024MB"
+  }
+
+  config = {
+    "user.access_interface" = "eth0"
+  }
+
+}
+
+resource "lxd_container" "swarm05" {
+  name      = "swarm05"
+  image     = "ubuntu:18.04"
+  ephemeral = false
+  profiles  = ["default"]
+  limits = {
+    cpu    = "2"
+    memory = "1024MB"
+  }
+
+  config = {
+    "user.access_interface" = "eth0"
+  }
+
+}
