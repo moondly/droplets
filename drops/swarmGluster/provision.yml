@@ -8,7 +8,7 @@
 
   pre_tasks:
     - set_fact:
-        swarm_master_nodes: "{{ ansible_play_hosts[0:3] }}"
+        swarm_master_nodes: "{{ ansible_play_hosts[0:1] }}"
     - set_fact:
         swarm_worker_nodes: "{{ ansible_play_hosts | difference(swarm_master_nodes) }}"
 
@@ -30,7 +30,6 @@
     - geerlingguy.glusterfs
     - geerlingguy.docker
     - thomasjpfan.docker-swarm
-    - geerlingguy.pip
   
   tasks:
     - name: "Build hosts file"
@@ -66,10 +65,6 @@
         fstype: glusterfs
         opts: "defaults,_netdev"
         state: mounted
-
-    - name: Docker python lib
-      pip:
-        name: docker
     
     - name: Readme
       local_action: template
