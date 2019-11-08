@@ -8,6 +8,7 @@
 
   roles:
     - geerlingguy.jenkins
+    - geerlingguy.docker
   
   tasks:
     - name: Readme

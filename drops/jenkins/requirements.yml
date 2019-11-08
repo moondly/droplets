@@ -1,2 +1,3 @@
 # from galaxy
 - src: geerlingguy.jenkins
+- src: geerlingguy.docker
