@@ -1,0 +1,26 @@
+---
+- hosts: template*
+  become: yes
+  become_method: sudo
+
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+    # TODO: Add something here if needed
+
+  roles:
+    # TODO: Add something here if needed
+    - geerlingguy.docker
+  
+  tasks:
+    # TODO: Add something here if needed
+    
+    - name: Readme
+      local_action: template
+      args:
+        src: "readme.j2"
+        dest: "{{ drop_home }}/README"
+        mode: '0644'
+      run_once: true
+
