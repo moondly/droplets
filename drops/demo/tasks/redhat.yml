@@ -1,3 +1,0 @@
-- yum:
-    name: "curl"
-    state: present
