@@ -6,39 +6,39 @@
   vars_files:
     - vars.yml
 
-  # roles:
-  #   - geerlingguy.docker
+  roles:
+    - geerlingguy.docker
   
   tasks:
-    # - name: Install required packages
-    #   apt:
-    #     pkg:
-    #       - python3-pip
+    - name: Install required packages
+      apt:
+        pkg:
+          - python3-pip
 
-    # - name: Install docker pip module
-    #   pip:
-    #     name: docker
+    - name: Install docker pip module
+      pip:
+        name: docker
     
-    # - name: Create mount point
-    #   file:
-    #     path: /mnt/registry
-    #     owner: root
-    #     group: root
-    #     mode: 0744
-    #     state: directory
+    - name: Create mount point
+      file:
+        path: /mnt/registry
+        owner: root
+        group: root
+        mode: 0744
+        state: directory
         
-    # - name: Create registry container
-    #   docker_container:
-    #     name: registry
-    #     image: registry:2
-    #     state: started
-    #     restart: yes
-    #     restart_policy: always
-    #     recreate: yes
-    #     published_ports:
-    #       - "5000:5000"
-    #     volumes:
-    #       - /mnt/registry:/var/lib/registry
+    - name: Create registry container
+      docker_container:
+        name: registry
+        image: registry:2
+        state: started
+        restart: yes
+        restart_policy: always
+        recreate: yes
+        published_ports:
+          - "5000:5000"
+        volumes:
+          - /mnt/registry:/var/lib/registry
 
     - name: Readme
       local_action: template
