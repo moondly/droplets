@@ -1,0 +1,28 @@
+###################################
+## DROPLET {{drop_name}}
+###################################
+
+IMPORTANT: The droplet will create an insecure registry for local tests only. 
+To be able to use it, on each docker engine that will access the registry do the following:
+
+$ sudo cat <<EOF > /etc/docker/daemon.json
+{
+  "insecure-registries" : ["dockerregistry01:5000"]
+}
+EOF
+
+$ sudo service docker restart
+
+You will then be able to use the registry:
+
+$ docker pull ubuntu:16.04
+$ docker tag ubuntu:16.04 dockerregistry01:5000/my-ubuntu
+$ docker push dockerregistry01:5000/my-ubuntu
+
+
+To connect:
+
+{% for host in ansible_play_hosts | sort %}
+  ssh root@{{ hostvars[host].ansible_hostname }}   ({{ hostvars[host].inventory_hostname }})
+{% endfor %}
+
