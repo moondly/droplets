@@ -1,0 +1,10 @@
+docker_edition: 'ce'
+docker_package: "docker-{{ docker_edition }}=18.06.3~ce~3-0~ubuntu"
+
+kubernetes_version: '1.15'
+kubernetes_allow_pods_on_master: true
+kubernetes_ignore_preflight_errors: 'all'
+
+gluster_mount_dir: /mnt/gluster
+gluster_brick_dir: /srv/gluster/brick
+gluster_brick_name: gluster

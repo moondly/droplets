@@ -1,0 +1,22 @@
+###################################
+## DROPLET {{drop_name}}
+###################################
+
+K8s master nodes:
+{% for host in k8s_master_nodes | sort %}
+  {{ hostvars[host].ansible_hostname }}
+{% endfor %}
+
+K8s worker nodes:
+{% for host in k8s_worker_nodes | sort %}
+  {{ hostvars[host].ansible_hostname }}
+{% endfor %}
+
+Gluster mounted at: {{ gluster_mount_dir }}
+
+To connect:
+
+{% for host in ansible_play_hosts | sort %}
+  ssh root@{{ hostvars[host].ansible_hostname }}   ({{ hostvars[host].inventory_hostname }})
+{% endfor %}
+
