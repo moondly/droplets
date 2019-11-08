@@ -1,0 +1,20 @@
+###################################
+## DROPLET {{drop_name}}
+###################################
+
+To connect:
+
+{% for host in ansible_play_hosts | sort %}
+  ssh root@{{ hostvars[host].ansible_hostname }}   ({{ hostvars[host].inventory_hostname }})
+{% endfor %}
+
+To access gitlab, you will have to add the following entry to your local /etc/hosts:
+
+{{ inventory_hostname }} gitlab
+
+URL: http://gitlab
+
+Initial credentials (change after initial install):
+  User: root
+  Pass: 5iveL!fe
+
