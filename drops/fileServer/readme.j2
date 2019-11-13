@@ -1,0 +1,14 @@
+###################################
+## DROPLET {{drop_name}}
+###################################
+
+Add the files to be exposed under: /var/files
+
+To access the files use: http://fileserver:8000
+
+To connect:
+
+{% for host in ansible_play_hosts | sort %}
+  ssh root@{{ hostvars[host].ansible_hostname }}   ({{ hostvars[host].inventory_hostname }})
+{% endfor %}
+

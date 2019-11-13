@@ -1,0 +1,48 @@
+---
+- hosts: fileServer*
+  become: yes
+  become_method: sudo
+
+  vars_files:
+    - vars.yml
+  
+  tasks:
+    - name: Create mount point
+      file:
+        path: /var/files
+        owner: root
+        group: root
+        mode: 0744
+        state: directory
+
+    - name: Config systemd service
+      blockinfile:
+        path: /lib/systemd/system/fileserver.service
+        create: yes
+        block: |
+            [Unit]
+            Description=Fileserver Service
+            After=multi-user.target
+
+            [Service]
+            Type=simple
+            WorkingDirectory=/var/files
+            ExecStart=/usr/bin/python3 -m http.server 8000
+
+            [Install]
+            WantedBy=multi-user.target
+
+    - name: Start service
+      service:
+        name: fileserver.service
+        state: started
+        enabled: yes
+
+    - name: Readme
+      local_action: template
+      args:
+        src: "readme.j2"
+        dest: "{{ drop_home }}/README"
+        mode: '0644'
+      run_once: true
+
