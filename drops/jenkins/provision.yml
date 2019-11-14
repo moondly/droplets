@@ -11,6 +11,14 @@
     - geerlingguy.docker
   
   tasks:
+    - name: Add user 'jenkins' to 'docker' group
+      user:
+        name: jenkins
+        group: docker
+    
+    - name: restart jenkins
+      service: name=jenkins state=restarted
+
     - name: Readme
       local_action: template
       args:
