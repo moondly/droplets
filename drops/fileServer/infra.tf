@@ -4,8 +4,8 @@ provider "lxd" {
 }
 
 
-resource "lxd_container" "fileServer" {
-  name      = "fileServer"
+resource "lxd_container" "fileServer01" {
+  name      = "fileServer01"
   image     = "ubuntu:18.04"
   ephemeral = false
   profiles  = ["default"]
