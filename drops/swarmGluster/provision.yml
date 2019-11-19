@@ -7,6 +7,10 @@
     - vars.yml
 
   pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        
     - set_fact:
         swarm_master_nodes: "{{ ansible_play_hosts[0:1] }}"
     - set_fact:
