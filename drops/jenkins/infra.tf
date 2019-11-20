@@ -11,7 +11,7 @@ resource "lxd_container" "jenkins01" {
   profiles  = ["default"]
   limits = {
     cpu    = "2"
-    memory = "3096MB"
+    memory = "4096MB"
   }
 
   config = {
